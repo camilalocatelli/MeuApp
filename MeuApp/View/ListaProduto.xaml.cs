@@ -59,8 +59,9 @@ public partial class ListaProduto : ContentPage
         catch (Exception ex)
         {
             await DisplayAlert("Ops", ex.Message, "OK");
-        } finally
-        { 
+        }
+        finally
+        {
             lst_produtos.IsRefreshing = false;
         }
     }
@@ -96,7 +97,7 @@ public partial class ListaProduto : ContentPage
         }
     }
 
-    private void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
+    private async void lst_produtos_ItemSelected(object sender, SelectedItemChangedEventArgs e)
     {
         try
         {
@@ -109,7 +110,7 @@ public partial class ListaProduto : ContentPage
         }
         catch (Exception ex)
         {
-            DisplayAlert("Ops", ex.Message, "OK");
+            await DisplayAlert("Ops", ex.Message, "OK");
         }
     }
 
@@ -132,5 +133,45 @@ public partial class ListaProduto : ContentPage
             lst_produtos.IsRefreshing = false;
         }
     }
-}
 
+    private async void CategoryFilter_Changed(object sender, EventArgs e)
+    {
+        try
+        {
+            string category = (sender as Picker).SelectedItem.ToString();
+
+            lista.Clear();
+
+            if (category == "Todos")
+            {
+                List<Produto> tmp = await App.Db.GetAll();
+                tmp.ForEach(i => lista.Add(i));
+            }
+            else
+            {
+                List<Produto> tmp = await App.Db.SearchByCategory(category);
+                tmp.ForEach(i => lista.Add(i));
+            }
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+
+    private async void ShowReport_Clicked(object sender, EventArgs e)
+    {
+        try
+        {
+            var report = await App.Db.GetTotalByCategory();
+
+            string message = string.Join("\n", report.Select(r => $"{r.Categoria}: {r.Total:C}"));
+
+            await DisplayAlert("Relatório de Gastos por Categoria", message, "OK");
+        }
+        catch (Exception ex)
+        {
+            await DisplayAlert("Ops", ex.Message, "OK");
+        }
+    }
+}

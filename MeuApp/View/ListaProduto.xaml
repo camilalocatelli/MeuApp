@@ -6,12 +6,13 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="Somar" Clicked="ToolbarItem_Clicked_1"/>
         <ToolbarItem Text="Adicionar" Clicked="ToolbarItem_Clicked"/>
+        <ToolbarItem Text="Relatório" Clicked="ShowReport_Clicked"/>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Resources>
         <ResourceDictionary>
-            <Style TargetType="">
-                <Setter Property="VerticalTextAligment" Value="Center" />
+            <Style TargetType="Label">
+                <Setter Property="VerticalTextAlignment" Value="Center" />
             </Style>
         </ResourceDictionary>
     </ContentPage.Resources>
@@ -22,6 +23,17 @@
                    Placeholder="Busca de Produtos"
                    TextChanged="txt_search_TextChanged"/>
 
+        <Picker x:Name="categoryPicker" SelectedIndexChanged="CategoryFilter_Changed">
+            <Picker.ItemsSource>
+                <x:Array Type="{x:Type x:String}">
+                    <x:String>Todos</x:String>
+                    <x:String>Alimentos</x:String>
+                    <x:String>Higiene</x:String>
+                    <x:String>Limpeza</x:String>
+                </x:Array>
+            </Picker.ItemsSource>
+        </Picker>
+
         <Frame Padding="0" Margin="10" VerticalOptions="FillAndExpand">
             <ListView x:Name="lst_produtos" 
                   IsPullToRefreshEnabled="True"
@@ -29,7 +41,7 @@
                   ItemSelected="lst_produtos_ItemSelected">
                 <ListView.Header>
                     <Grid ColumnDefinitions="30, 100, 80, 50, 90"
-                          BackgroundColor="{StaticResource Gray100}">
+                          BackgroundColor="{StaticResource MidnightBlue}">
                         <Label Grid.Column="0" Text="ID" Padding="5" FontAttributes="Bold"/>
                         <Label Grid.Column="1" Text="Descrição" FontAttributes="Bold"/>
                         <Label Grid.Column="2" Text="Preço" FontAttributes="Bold"/>
@@ -55,6 +67,6 @@
                 </ListView.ItemTemplate>
             </ListView>
         </Frame>
-        
+
     </StackLayout>
 </ContentPage>
